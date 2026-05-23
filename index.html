@@ -33,38 +33,42 @@
                         </select>
                     </div>
 
-                    <div
-                        class="form-group"
-                        id="headlineGroup"
-                        style="display: none"
-                    >
-                        <label for="headline">Headline / News Title</label>
-                        <input
-                            type="text"
-                            id="headline"
-                            placeholder="শিরোনাম এখানে লিখুন..."
-                            value="আলোআয়নের নতুন উদ্যোগ: তারুণ্যের জয়গান"
-                        />
-                    </div>
-
                     <div class="form-group">
-                        <label for="quote">Main Content / Body Text</label>
+                        <label for="quote" id="mainLabel"
+                            >Primary Text (Quote/Headline)</label
+                        >
                         <textarea
                             id="quote"
-                            placeholder="আপনার কথা এখানে লিখুন..."
+                            placeholder="এখানে লিখুন..."
                             rows="4"
                         >
 জ্ঞানের আলোয় আলোকিত হোক প্রতিটি জীবন।</textarea
                         >
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group" id="authorGroup">
                         <label for="author">Author / Subtitle</label>
                         <input
                             type="text"
                             id="author"
-                            placeholder="লেখকের নাম (ঐচ্ছিক)"
+                            placeholder="লেখকের নাম"
                             value="আলোআয়ন"
+                        />
+                    </div>
+
+                    <div
+                        class="form-group"
+                        id="newsSnippetGroup"
+                        style="display: none"
+                    >
+                        <label for="headline"
+                            >Secondary Body Text (Optional)</label
+                        >
+                        <input
+                            type="text"
+                            id="headline"
+                            placeholder="সংক্ষিপ্ত বর্ণনা..."
+                            value=""
                         />
                     </div>
 
@@ -73,7 +77,7 @@
                         <input
                             type="text"
                             id="category"
-                            placeholder="বিভাগ (যেমন: শিক্ষা, অনুপ্রেরণা)"
+                            placeholder="বিভাগ"
                             value="শিক্ষা"
                         />
                     </div>
@@ -98,7 +102,7 @@
                             <input
                                 type="color"
                                 id="themeColor"
-                                value="#9c0001"
+                                value="#FF8C00"
                             />
                         </div>
                         <div class="form-group">
