@@ -201,7 +201,7 @@ canvas {
 
 .preview-hint {
     font-size: 0.8rem;
-    color: var(--text-secondary);
+    color: white;
 }
 
 @media (max-width: 900px) {

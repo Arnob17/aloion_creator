@@ -44,7 +44,7 @@ window.onload = () => {
 // Listeners
 templateSelect.addEventListener("change", (e) => {
   if (e.target.value === "news") {
-    authorGroup.style.display = "none";
+    authorGroup.style.display = "flex"; // Keep author visible
     newsSnippetGroup.style.display = "flex";
     mainLabel.innerText = "Headline / Title";
   } else {
@@ -116,12 +116,14 @@ function drawUserImage() {
 
   if (imgRatio > canvasRatio) {
     drawHeight = CANVAS_HEIGHT;
-    drawWidth = backgroundImage.width * (CANVAS_HEIGHT / backgroundImage.height);
+    drawWidth =
+      backgroundImage.width * (CANVAS_HEIGHT / backgroundImage.height);
     x = (CANVAS_WIDTH - drawWidth) / 2;
     y = 0;
   } else {
     drawWidth = CANVAS_WIDTH;
-    drawHeight = backgroundImage.height * (CANVAS_WIDTH / backgroundImage.width);
+    drawHeight =
+      backgroundImage.height * (CANVAS_WIDTH / backgroundImage.width);
     x = 0;
     y = (CANVAS_HEIGHT - drawHeight) / 2;
   }
@@ -135,8 +137,12 @@ function drawUserImage() {
 
 function drawOverlays(template) {
   const vignette = ctx.createRadialGradient(
-    CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, 0,
-    CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, CANVAS_HEIGHT * 0.8
+    CANVAS_WIDTH / 2,
+    CANVAS_HEIGHT / 2,
+    0,
+    CANVAS_WIDTH / 2,
+    CANVAS_HEIGHT / 2,
+    CANVAS_HEIGHT * 0.8,
   );
   vignette.addColorStop(0, "rgba(0,0,0,0)");
   vignette.addColorStop(1, "rgba(0,0,0,0.6)");
@@ -144,7 +150,12 @@ function drawOverlays(template) {
   ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
   const gradStart = template === "news" ? 0.5 : 0.4;
-  const textGrad = ctx.createLinearGradient(0, CANVAS_HEIGHT * gradStart, 0, CANVAS_HEIGHT);
+  const textGrad = ctx.createLinearGradient(
+    0,
+    CANVAS_HEIGHT * gradStart,
+    0,
+    CANVAS_HEIGHT,
+  );
   textGrad.addColorStop(0, "rgba(5, 10, 21, 0)");
   textGrad.addColorStop(template === "news" ? 0.7 : 1, "rgba(5, 10, 21, 0.95)");
   ctx.fillStyle = textGrad;
@@ -173,7 +184,11 @@ function drawQuoteTypography() {
     ctx.fillStyle = accentColor;
     ctx.textBaseline = "middle";
     ctx.textAlign = "center";
-    ctx.fillText(category, badgeX + badgeWidth / 2, badgeY + badgeHeight / 2 + 2);
+    ctx.fillText(
+      category,
+      badgeX + badgeWidth / 2,
+      badgeY + badgeHeight / 2 + 2,
+    );
     ctx.restore();
   }
 
@@ -232,7 +247,9 @@ function drawNewsTypography() {
     if (ctx.measureText(testLine).width > maxWidth && n > 0) {
       lines.push(line.trim());
       line = words[n] + " ";
-    } else { line = testLine; }
+    } else {
+      line = testLine;
+    }
   }
   lines.push(line.trim());
 
@@ -279,8 +296,19 @@ function drawNewsTypography() {
     ctx.fillText(
       snippet.substring(0, 150) + (snippet.length > 150 ? "..." : ""),
       PADDING,
-      headlineBottomY + 20
+      headlineBottomY + 20,
     );
+    ctx.restore();
+  }
+
+  // Draw Author/Subtitle in News Template
+  const author = authorInput.value;
+  if (author) {
+    ctx.save();
+    ctx.font = '400 38px "Tiro Bangla"';
+    ctx.fillStyle = "rgba(248, 249, 250, 0.9)";
+    ctx.textAlign = "left";
+    ctx.fillText(author, 80, headlineBottomY + 80);
     ctx.restore();
   }
 }
@@ -322,7 +350,9 @@ function wrapText(context, text, x, y, maxWidth, lineHeight) {
       lines.push(line);
       line = words[n] + " ";
       y += lineHeight;
-    } else { line = testLine; }
+    } else {
+      line = testLine;
+    }
   }
   context.fillText(line, x, y);
   lines.push(line);
