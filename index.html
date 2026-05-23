@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AloIon Photo-Card Generator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Tiro+Bangla:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <div class="logo-text">AloIon <span>Creator</span></div>
+            <p class="subtitle">Automated Social Media Card Generator</p>
+        </header>
+
+        <main class="main-content">
+            <section class="editor-pane">
+                <div class="form-group">
+                    <label for="quote">Main Quote / Text</label>
+                    <textarea id="quote" placeholder="আপনার কথা এখানে লিখুন..." rows="4">জ্ঞানের আলোয় আলোকিত হোক প্রতিটি জীবন।</textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="author">Author / Subtitle</label>
+                    <input type="text" id="author" placeholder="লেখকের নাম (ঐচ্ছিক)" value="আলোআয়ন">
+                </div>
+
+                <div class="form-group">
+                    <label for="category">Category Badge</label>
+                    <input type="text" id="category" placeholder="বিভাগ (যেমন: শিক্ষা, অনুপ্রেরণা)" value="শিক্ষা">
+                </div>
+
+                <div class="form-group">
+                    <label for="imageUpload">Background Image</label>
+                    <div class="file-input-wrapper">
+                        <button class="btn btn-secondary">Choose Image</button>
+                        <input type="file" id="imageUpload" accept="image/*">
+                    </div>
+                </div>
+
+                <div class="controls-row">
+                    <div class="form-group">
+                        <label for="themeColor">Accent Color</label>
+                        <input type="color" id="themeColor" value="#FF8C00">
+                    </div>
+                    <div class="form-group">
+                        <label for="overlayOpacity">Overlay Darken</label>
+                        <input type="range" id="overlayOpacity" min="0" max="1" step="0.1" value="0.4">
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <button id="generateBtn" class="btn btn-primary">Refresh Canvas</button>
+                    <button id="downloadBtn" class="btn btn-accent">Download PNG</button>
+                </div>
+            </section>
+
+            <section class="preview-pane">
+                <div class="canvas-wrapper">
+                    <canvas id="cardCanvas" width="1080" height="1350"></canvas>
+                </div>
+                <p class="preview-hint">1080x1350 (4:5 Ratio) Optimized for Facebook</p>
+            </section>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
