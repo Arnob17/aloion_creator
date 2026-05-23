@@ -12,8 +12,8 @@ const mainLabel = document.getElementById("mainLabel");
 const authorGroup = document.getElementById("authorGroup");
 const newsSnippetGroup = document.getElementById("newsSnippetGroup");
 
-const primaryTextInput = document.getElementById("quote"); // Main big text
-const secondaryTextInput = document.getElementById("headline"); // Snippet for news
+const primaryTextInput = document.getElementById("quote");
+const secondaryTextInput = document.getElementById("headline");
 const authorInput = document.getElementById("author");
 const categoryInput = document.getElementById("category");
 const imageUpload = document.getElementById("imageUpload");
@@ -32,19 +32,31 @@ const CANVAS_HEIGHT = 1350;
 const PADDING = 80;
 
 // Initialize
-window.onload = () => {
+function init() {
+  // Use the Base64 logo from logo.js to bypass CORS issues entirely
+  if (typeof ALOION_LOGO !== 'undefined') {
+    logoImg.src = ALOION_LOGO;
+  } else {
+    // Fallback if logo.js isn't loaded
+    logoImg.src = "aloionLogo.jpg";
+  }
+  
   logoImg.onload = () => {
-    document.fonts.ready.then(() => {
-      render();
-    });
+    document.fonts.ready.then(() => render());
   };
-  logoImg.src = "aloionLogo.jpg";
-};
+
+  logoImg.onerror = () => {
+    console.error("Failed to load logo image.");
+    document.fonts.ready.then(() => render());
+  };
+}
+
+window.onload = init;
 
 // Listeners
 templateSelect.addEventListener("change", (e) => {
   if (e.target.value === "news") {
-    authorGroup.style.display = "flex"; // Keep author visible
+    authorGroup.style.display = "flex";
     newsSnippetGroup.style.display = "flex";
     mainLabel.innerText = "Headline / Title";
   } else {
@@ -64,6 +76,8 @@ imageUpload.addEventListener("change", (e) => {
     const reader = new FileReader();
     reader.onload = (event) => {
       const img = new Image();
+      // Data URLs don't need crossOrigin, but setting it to anonymous is safe
+      img.crossOrigin = "anonymous";
       img.onload = () => {
         backgroundImage = img;
         render();
@@ -109,6 +123,8 @@ function drawBaseBackground() {
 }
 
 function drawUserImage() {
+  if (!backgroundImage || !backgroundImage.complete || backgroundImage.naturalWidth === 0) return;
+
   const imgRatio = backgroundImage.width / backgroundImage.height;
   const canvasRatio = CANVAS_WIDTH / CANVAS_HEIGHT;
 
@@ -116,14 +132,12 @@ function drawUserImage() {
 
   if (imgRatio > canvasRatio) {
     drawHeight = CANVAS_HEIGHT;
-    drawWidth =
-      backgroundImage.width * (CANVAS_HEIGHT / backgroundImage.height);
+    drawWidth = backgroundImage.width * (CANVAS_HEIGHT / backgroundImage.height);
     x = (CANVAS_WIDTH - drawWidth) / 2;
     y = 0;
   } else {
     drawWidth = CANVAS_WIDTH;
-    drawHeight =
-      backgroundImage.height * (CANVAS_WIDTH / backgroundImage.width);
+    drawHeight = backgroundImage.height * (CANVAS_WIDTH / backgroundImage.width);
     x = 0;
     y = (CANVAS_HEIGHT - drawHeight) / 2;
   }
@@ -137,12 +151,8 @@ function drawUserImage() {
 
 function drawOverlays(template) {
   const vignette = ctx.createRadialGradient(
-    CANVAS_WIDTH / 2,
-    CANVAS_HEIGHT / 2,
-    0,
-    CANVAS_WIDTH / 2,
-    CANVAS_HEIGHT / 2,
-    CANVAS_HEIGHT * 0.8,
+    CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, 0,
+    CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, CANVAS_HEIGHT * 0.8
   );
   vignette.addColorStop(0, "rgba(0,0,0,0)");
   vignette.addColorStop(1, "rgba(0,0,0,0.6)");
@@ -150,12 +160,7 @@ function drawOverlays(template) {
   ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
   const gradStart = template === "news" ? 0.5 : 0.4;
-  const textGrad = ctx.createLinearGradient(
-    0,
-    CANVAS_HEIGHT * gradStart,
-    0,
-    CANVAS_HEIGHT,
-  );
+  const textGrad = ctx.createLinearGradient(0, CANVAS_HEIGHT * gradStart, 0, CANVAS_HEIGHT);
   textGrad.addColorStop(0, "rgba(5, 10, 21, 0)");
   textGrad.addColorStop(template === "news" ? 0.7 : 1, "rgba(5, 10, 21, 0.95)");
   ctx.fillStyle = textGrad;
@@ -184,11 +189,7 @@ function drawQuoteTypography() {
     ctx.fillStyle = accentColor;
     ctx.textBaseline = "middle";
     ctx.textAlign = "center";
-    ctx.fillText(
-      category,
-      badgeX + badgeWidth / 2,
-      badgeY + badgeHeight / 2 + 2,
-    );
+    ctx.fillText(category, badgeX + badgeWidth / 2, badgeY + badgeHeight / 2 + 2);
     ctx.restore();
   }
 
@@ -233,8 +234,8 @@ function drawQuoteTypography() {
 
 function drawNewsTypography() {
   const accentColor = themeColorInput.value;
-  const headline = primaryTextInput.value; // Primary box is the Headline
-  const snippet = secondaryTextInput.value; // Secondary box is the Snippet
+  const headline = primaryTextInput.value;
+  const snippet = secondaryTextInput.value;
   const category = categoryInput.value.toUpperCase();
 
   ctx.font = '700 84px "Tiro Bangla"';
@@ -247,9 +248,7 @@ function drawNewsTypography() {
     if (ctx.measureText(testLine).width > maxWidth && n > 0) {
       lines.push(line.trim());
       line = words[n] + " ";
-    } else {
-      line = testLine;
-    }
+    } else { line = testLine; }
   }
   lines.push(line.trim());
 
@@ -293,15 +292,10 @@ function drawNewsTypography() {
     ctx.font = '400 34px "Tiro Bangla"';
     ctx.fillStyle = "rgba(248, 249, 250, 0.8)";
     ctx.textBaseline = "top";
-    ctx.fillText(
-      snippet.substring(0, 150) + (snippet.length > 150 ? "..." : ""),
-      PADDING,
-      headlineBottomY + 20,
-    );
+    ctx.fillText(snippet.substring(0, 150) + (snippet.length > 150 ? "..." : ""), PADDING, headlineBottomY + 20);
     ctx.restore();
   }
 
-  // Draw Author/Subtitle in News Template
   const author = authorInput.value;
   if (author) {
     ctx.save();
@@ -314,6 +308,8 @@ function drawNewsTypography() {
 }
 
 function drawLogo(template) {
+  if (!logoImg.complete || logoImg.naturalWidth === 0) return;
+
   const logoSize = template === "news" ? 160 : 120;
   const x = template === "news" ? PADDING : CANVAS_WIDTH - PADDING - logoSize;
   const y = template === "news" ? PADDING : CANVAS_HEIGHT - PADDING - logoSize;
@@ -350,9 +346,7 @@ function wrapText(context, text, x, y, maxWidth, lineHeight) {
       lines.push(line);
       line = words[n] + " ";
       y += lineHeight;
-    } else {
-      line = testLine;
-    }
+    } else { line = testLine; }
   }
   context.fillText(line, x, y);
   lines.push(line);
@@ -375,8 +369,13 @@ function roundRect(ctx, x, y, width, height, radius) {
 }
 
 function downloadCanvas() {
-  const link = document.createElement("a");
-  link.download = `aloion-card-${Date.now()}.png`;
-  link.href = canvas.toDataURL("image/png");
-  link.click();
+  try {
+    const link = document.createElement("a");
+    link.download = `aloion-card-${Date.now()}.png`;
+    link.href = canvas.toDataURL("image/png");
+    link.click();
+  } catch (err) {
+    console.error("Export failed:", err);
+    alert("আপনার ব্রাউজার সিকিউরিটি এই ডাউনলোডটি ব্লক করছে। এটি সাধারণত ঘটে যখন আপনি একটি এক্সটারনাল ইমেজ আপলোড করেন। অনুগ্রহ করে একটি লোকাল ইমেজ ব্যবহার করুন অথবা অ্যাপটি 'Live Server' দিয়ে চালান।");
+  }
 }
