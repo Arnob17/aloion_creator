@@ -10,12 +10,11 @@
             href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Tiro+Bangla:ital@0;1&display=swap"
             rel="stylesheet"
         />
-        <link rel="stylesheet" href="style.css">
-        </head>
-        <body>
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
         <script src="logo.js"></script>
         <div class="app-container">
-
             <header class="app-header">
                 <div class="logo-text">আলোআয়ন <span>Creator</span></div>
                 <p class="subtitle">Automated Social Media Card Generator</p>
@@ -32,6 +31,7 @@
                             <option value="quote">
                                 Author - Quote (Minimalist)
                             </option>
+                            <option value="quiz">Quiz</option>
                         </select>
                     </div>
 
@@ -72,6 +72,25 @@
                             placeholder="সংক্ষিপ্ত বর্ণনা..."
                             value=""
                         />
+                    </div>
+
+                    <div id="quizGroup" style="display: none">
+                        <div class="form-group">
+                            <label for="optionA">Option A</label>
+                            <input type="text" id="optionA" value="অপশন ১" />
+                        </div>
+                        <div class="form-group">
+                            <label for="optionB">Option B</label>
+                            <input type="text" id="optionB" value="অপশন ২" />
+                        </div>
+                        <div class="form-group">
+                            <label for="optionC">Option C</label>
+                            <input type="text" id="optionC" value="অপশন ৩" />
+                        </div>
+                        <div class="form-group">
+                            <label for="optionD">Option D</label>
+                            <input type="text" id="optionD" value="অপশন ৪" />
+                        </div>
                     </div>
 
                     <div class="form-group">
